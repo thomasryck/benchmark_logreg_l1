@@ -14,6 +14,10 @@ class Solver(BaseSolver):
     install_cmd = 'conda'
     requirements = ['cyanure']
 
+    parameters = {
+        'solver': ['catalyst-miso', 'qning-miso', 'qning-ista',  'auto',  'acc-svrg'],
+    }
+
     def set_objective(self, X, y, lmbd):
         self.X, self.y, self.lmbd = X, y, lmbd
         if (scipy.sparse.issparse(self.X) and
@@ -22,20 +26,22 @@ class Solver(BaseSolver):
 
         warnings.filterwarnings('ignore', category=ConvergenceWarning)
 
+        if self.solver is None:
+            self.solver = "auto"
 
         self.solver_parameter = dict(
         lambda_1=self.lmbd / self.X.shape[0], solver='auto', duality_gap_interval=10,
-        tol=1e-12, verbose=False
+        tol=1e-12, verbose=False, solver=self.solver
         )
 
-        self.solver = Classifier(loss='logistic', penalty='l1',
+        self.solver_instance = Classifier(loss='logistic', penalty='l1',
                                        fit_intercept=False,
                         **self.solver_parameter)
        
 
     def run(self, n_iter):
-        self.solver.max_iter = n_iter
-        self.solver.fit(self.X, self.y)
+        self.solver_instance.max_iter = n_iter
+        self.solver_instance.fit(self.X, self.y)
 
     def get_result(self):
-        return self.solver.get_weights()
+        return self.solver_instance.get_weights()
