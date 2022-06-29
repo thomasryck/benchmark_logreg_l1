@@ -30,7 +30,7 @@ class Solver(BaseSolver):
             self.solver = "auto"
 
         self.solver_parameter = dict(
-        lambda_1=self.lmbd / self.X.shape[0], solver='auto', duality_gap_interval=10,
+        lambda_1=self.lmbd / self.X.shape[0], duality_gap_interval=10,
         tol=1e-12, verbose=False, solver=self.solver
         )
 
