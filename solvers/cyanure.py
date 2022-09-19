@@ -9,7 +9,7 @@ with safe_import_context() as import_ctx:
 
 
 class Solver(BaseSolver):
-    name = 'cyanure.estimators'
+    name = 'cyanure_norm'
 
     install_cmd = 'conda'
     requirements = ['cyanure']
